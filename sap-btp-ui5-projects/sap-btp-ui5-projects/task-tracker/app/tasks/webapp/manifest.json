@@ -1,0 +1,24 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "com.demo.tasks",
+    "type": "application",
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "applicationVersion": { "version": "1.0.0" },
+    "i18n": "i18n/i18n.properties",
+    "dataSources": {
+      "mainService": { "uri": "/odata/v4/tasks/", "type": "OData", "settings": { "odataVersion": "4.0" } }
+    }
+  },
+  "sap.ui": { "technology": "UI5", "deviceTypes": { "desktop": true, "tablet": true, "phone": true } },
+  "sap.ui5": {
+    "rootView": { "viewName": "com.demo.tasks.view.Main", "type": "XML", "async": true, "id": "main" },
+    "dependencies": { "minUI5Version": "1.108.0", "libs": { "sap.m": {}, "sap.ui.core": {}, "sap.ui.layout": {} } },
+    "contentDensities": { "compact": true, "cozy": true },
+    "models": {
+      "i18n": { "type": "sap.ui.model.resource.ResourceModel", "settings": { "bundleName": "com.demo.tasks.i18n.i18n" } },
+      "": { "dataSource": "mainService", "settings": { "operationMode": "Server", "autoExpandSelect": true, "earlyRequests": true } }
+    }
+  }
+}

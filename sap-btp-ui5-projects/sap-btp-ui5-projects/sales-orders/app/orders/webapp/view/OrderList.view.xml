@@ -1,0 +1,57 @@
+<mvc:View
+  controllerName="com.demo.orders.controller.OrderList"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.ui.layout.form">
+  <Page id="listPage" title="{i18n>appTitle}">
+    <content>
+      <Table id="orderTable" growing="true" growingThreshold="25"
+        items="{ path: '/Orders', parameters: { $orderby: 'orderNo desc' } }">
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text="{i18n>orders}" level="H2"/>
+            <ToolbarSpacer/>
+            <Button icon="sap-icon://add" text="{i18n>newOrder}" type="Emphasized" press=".onNewOrder"/>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column><Text text="{i18n>orderNo}"/></Column>
+          <Column><Text text="{i18n>customer}"/></Column>
+          <Column hAlign="Center"><Text text="{i18n>status}"/></Column>
+          <Column hAlign="End"><Text text="{i18n>total}"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem type="Navigation" press=".onOrderPress">
+            <cells>
+              <ObjectIdentifier title="{orderNo}"/>
+              <Text text="{customer/name}"/>
+              <ObjectStatus text="{status}"
+                state="{= ${status} === 'Submitted' ? 'Success' : ${status} === 'Cancelled' ? 'Error' : 'Warning' }"/>
+              <ObjectNumber number="{ path: 'total', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 12, scale: 2 } }" unit="{currency}"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+
+    <dependents>
+      <Dialog id="newOrderDialog" title="{i18n>newOrder}" contentWidth="28rem">
+        <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+          <Label text="{i18n>customer}" required="true"/>
+          <Select id="selCustomer" forceSelection="false" items="{ path: '/Customers', sorter: { path: 'name' } }">
+            <core:Item key="{ID}" text="{name}"/>
+          </Select>
+          <Label text="{i18n>product}" required="true"/>
+          <Input id="inProduct"/>
+          <Label text="{i18n>quantity}" required="true"/>
+          <Input id="inQty" type="Number" value="1"/>
+          <Label text="{i18n>price}" required="true"/>
+          <Input id="inPrice" type="Number"/>
+        </f:SimpleForm>
+        <beginButton><Button text="{i18n>add}" type="Emphasized" press=".onCreate"/></beginButton>
+        <endButton><Button text="{i18n>cancel}" press=".onCancelDialog"/></endButton>
+      </Dialog>
+    </dependents>
+  </Page>
+</mvc:View>

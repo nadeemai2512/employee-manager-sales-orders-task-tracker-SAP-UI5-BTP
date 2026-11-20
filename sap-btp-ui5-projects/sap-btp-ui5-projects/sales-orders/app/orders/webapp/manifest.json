@@ -1,0 +1,43 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "com.demo.orders",
+    "type": "application",
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "applicationVersion": { "version": "1.0.0" },
+    "i18n": "i18n/i18n.properties",
+    "dataSources": {
+      "mainService": { "uri": "/odata/v4/sales/", "type": "OData", "settings": { "odataVersion": "4.0" } }
+    }
+  },
+  "sap.ui": { "technology": "UI5", "deviceTypes": { "desktop": true, "tablet": true, "phone": true } },
+  "sap.ui5": {
+    "rootView": { "viewName": "com.demo.orders.view.App", "type": "XML", "async": true, "id": "app" },
+    "dependencies": { "minUI5Version": "1.108.0", "libs": { "sap.m": {}, "sap.ui.core": {}, "sap.ui.layout": {} } },
+    "contentDensities": { "compact": true, "cozy": true },
+    "models": {
+      "i18n": { "type": "sap.ui.model.resource.ResourceModel", "settings": { "bundleName": "com.demo.orders.i18n.i18n" } },
+      "": { "dataSource": "mainService", "settings": { "operationMode": "Server", "autoExpandSelect": true, "earlyRequests": true } }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.demo.orders.view",
+        "controlId": "appControl",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        { "name": "list", "pattern": "", "target": "list" },
+        { "name": "detail", "pattern": "order/{orderId}", "target": "detail" }
+      ],
+      "targets": {
+        "list": { "name": "OrderList", "id": "orderList" },
+        "detail": { "name": "OrderDetail", "id": "orderDetail" }
+      }
+    }
+  }
+}

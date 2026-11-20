@@ -1,0 +1,20 @@
+{
+  "name": "sales-orders",
+  "version": "1.0.0",
+  "description": "Sales Order Management (CAP + SAPUI5)",
+  "private": true,
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "build": "mbt build -t gen --mtar sales-orders.mtar",
+    "deploy": "cf deploy gen/sales-orders.mtar"
+  },
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@cap-js/hana": "^1",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "devDependencies": { "@cap-js/sqlite": "^1" },
+  "cds": { "requires": { "[production]": { "db": "hana", "auth": "xsuaa" } } }
+}

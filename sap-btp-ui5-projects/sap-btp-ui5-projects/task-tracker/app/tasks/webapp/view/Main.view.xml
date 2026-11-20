@@ -1,0 +1,81 @@
+<mvc:View
+  controllerName="com.demo.tasks.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.ui.layout.form"
+  xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+  displayBlock="true">
+  <Page id="page" title="{i18n>appTitle}">
+    <headerContent>
+      <ObjectStatus text="{i18n>overdue}: {summary>/overdue}" state="{= ${summary>/overdue} > 0 ? 'Error' : 'Success' }" class="sapUiSmallMarginEnd"/>
+    </headerContent>
+    <content>
+      <IconTabBar id="tabBar" expandable="false" stretchContentHeight="false" select=".onTabSelect" selectedKey="all">
+        <items>
+          <IconTabFilter key="all" icon="sap-icon://list" text="{i18n>all}" count="{summary>/total}"/>
+          <IconTabSeparator/>
+          <IconTabFilter key="Open" icon="sap-icon://pending" iconColor="Critical" text="{i18n>open}" count="{summary>/open}"/>
+          <IconTabFilter key="InProgress" icon="sap-icon://in-progress" iconColor="Neutral" text="{i18n>inProgress}" count="{summary>/inProgress}"/>
+          <IconTabFilter key="Done" icon="sap-icon://accept" iconColor="Positive" text="{i18n>done}" count="{summary>/done}"/>
+        </items>
+        <content>
+          <List id="taskList" mode="SingleSelectLeft" growing="true" growingThreshold="30"
+            items="{ path: '/Tasks', parameters: { $orderby: 'dueDate' } }">
+            <headerToolbar>
+              <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://add" text="{i18n>add}" type="Emphasized" press=".onAdd"/>
+                <Button icon="sap-icon://media-play" text="{i18n>start}" press=".onSetStatus" customData:status="InProgress"/>
+                <Button icon="sap-icon://accept" text="{i18n>complete}" type="Accept" press=".onSetStatus" customData:status="Done"/>
+                <Button icon="sap-icon://undo" text="{i18n>reopen}" press=".onSetStatus" customData:status="Open"/>
+                <Button icon="sap-icon://delete" text="{i18n>delete}" type="Reject" press=".onDelete"/>
+              </OverflowToolbar>
+            </headerToolbar>
+            <items>
+              <ObjectListItem
+                title="{title}"
+                intro="{assignee}">
+                <attributes>
+                  <ObjectAttribute text="{description}"/>
+                  <ObjectAttribute text="{ path: 'dueDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { style: 'medium' } }"/>
+                </attributes>
+                <firstStatus>
+                  <ObjectStatus text="{priority}"
+                    state="{= ${priority} === 'High' ? 'Error' : ${priority} === 'Medium' ? 'Warning' : 'Success' }"/>
+                </firstStatus>
+                <secondStatus>
+                  <ObjectStatus text="{status}"
+                    state="{= ${status} === 'Done' ? 'Success' : ${status} === 'InProgress' ? 'Information' : 'None' }"/>
+                </secondStatus>
+              </ObjectListItem>
+            </items>
+          </List>
+        </content>
+      </IconTabBar>
+    </content>
+
+    <dependents>
+      <Dialog id="taskDialog" title="{i18n>newTask}" contentWidth="28rem">
+        <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+          <Label text="{i18n>title}" required="true"/>
+          <Input id="inTitle" maxLength="120"/>
+          <Label text="{i18n>description}"/>
+          <TextArea id="inDesc" rows="3" maxLength="500"/>
+          <Label text="{i18n>priority}"/>
+          <Select id="selPriority" selectedKey="Medium">
+            <core:Item key="High" text="{i18n>high}"/>
+            <core:Item key="Medium" text="{i18n>medium}"/>
+            <core:Item key="Low" text="{i18n>low}"/>
+          </Select>
+          <Label text="{i18n>dueDate}"/>
+          <DatePicker id="inDue" valueFormat="yyyy-MM-dd" displayFormat="medium"/>
+          <Label text="{i18n>assignee}"/>
+          <Input id="inAssignee"/>
+        </f:SimpleForm>
+        <beginButton><Button text="{i18n>save}" type="Emphasized" press=".onSave"/></beginButton>
+        <endButton><Button text="{i18n>cancel}" press=".onCancel"/></endButton>
+      </Dialog>
+    </dependents>
+  </Page>
+</mvc:View>

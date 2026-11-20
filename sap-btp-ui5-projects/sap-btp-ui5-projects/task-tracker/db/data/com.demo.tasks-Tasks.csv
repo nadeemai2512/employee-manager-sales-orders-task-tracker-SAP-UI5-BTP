@@ -1,0 +1,6 @@
+ID,title,description,priority,status,dueDate,assignee
+f0000000-0000-0000-0000-000000000001,Prepare sprint demo,Slides and live demo of the new UI5 app,High,InProgress,2026-11-25,Anita
+f0000000-0000-0000-0000-000000000002,Fix login redirect bug,Approuter redirects to wrong page after logout,High,Open,2026-11-10,Ravi
+f0000000-0000-0000-0000-000000000003,Update README,Document deployment steps for BTP,Low,Open,2027-01-15,Meera
+f0000000-0000-0000-0000-000000000004,Review pull requests,Review open PRs for the CAP service,Medium,Done,2026-11-15,Arjun
+f0000000-0000-0000-0000-000000000005,Set up HANA Cloud,Create HDI container in the dev space,Medium,Open,2026-12-05,Priya

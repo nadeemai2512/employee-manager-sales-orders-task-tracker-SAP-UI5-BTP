@@ -1,0 +1,67 @@
+_schema-version: "3.3.0"
+ID: sales-orders
+version: 1.0.0
+description: "Sales Order Management (CAP + SAPUI5)"
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci --omit=dev || npm install --omit=dev
+        - npx cds build --production
+modules:
+  - name: sales-orders-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: sales-orders-db
+      - name: sales-orders-auth
+  - name: sales-orders-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: sales-orders-db
+  - name: sales-orders-approuter
+    type: approuter.nodejs
+    path: approuter
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    build-parameters:
+      builder: custom
+      commands:
+        - mkdir -p resources && cp -r ../app/orders/webapp/. resources/
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: sales-orders-auth
+resources:
+  - name: sales-orders-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: sales-orders-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json

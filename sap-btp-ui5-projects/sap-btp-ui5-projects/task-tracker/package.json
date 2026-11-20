@@ -1,0 +1,20 @@
+{
+  "name": "task-tracker",
+  "version": "1.0.0",
+  "description": "Task Tracker (CAP + SAPUI5)",
+  "private": true,
+  "scripts": {
+    "start": "cds-serve",
+    "watch": "cds watch",
+    "build": "mbt build -t gen --mtar task-tracker.mtar",
+    "deploy": "cf deploy gen/task-tracker.mtar"
+  },
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@cap-js/hana": "^1",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "devDependencies": { "@cap-js/sqlite": "^1" },
+  "cds": { "requires": { "[production]": { "db": "hana", "auth": "xsuaa" } } }
+}

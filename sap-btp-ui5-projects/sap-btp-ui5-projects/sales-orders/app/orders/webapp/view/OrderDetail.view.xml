@@ -1,0 +1,49 @@
+<mvc:View
+  controllerName="com.demo.orders.controller.OrderDetail"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page id="detailPage" title="{i18n>orders}" showNavButton="true" navButtonPress=".onNavBack">
+    <content>
+      <ObjectHeader
+        title="{i18n>orders} {orderNo}"
+        intro="{customer/name}"
+        number="{ path: 'total', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 12, scale: 2 } }"
+        numberUnit="{currency}">
+        <statuses>
+          <ObjectStatus text="{status}"
+            state="{= ${status} === 'Submitted' ? 'Success' : ${status} === 'Cancelled' ? 'Error' : 'Warning' }"/>
+        </statuses>
+      </ObjectHeader>
+      <Table id="itemTable" items="{items}">
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text="{i18n>items}" level="H3"/>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column><Text text="{i18n>product}"/></Column>
+          <Column hAlign="End"><Text text="{i18n>quantity}"/></Column>
+          <Column hAlign="End"><Text text="{i18n>price}"/></Column>
+          <Column hAlign="End"><Text text="{i18n>amount}"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{product}"/>
+              <Text text="{quantity}"/>
+              <ObjectNumber number="{ path: 'price', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 9, scale: 2 } }"/>
+              <ObjectNumber number="{ path: 'amount', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 12, scale: 2 } }"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+    <footer>
+      <OverflowToolbar>
+        <ToolbarSpacer/>
+        <Button text="{i18n>submitOrder}" type="Accept" enabled="{= ${status} === 'Open' }" press=".onSubmit"/>
+        <Button text="{i18n>cancelOrder}" type="Reject" enabled="{= ${status} === 'Open' || ${status} === 'Submitted' }" press=".onCancelOrder"/>
+      </OverflowToolbar>
+    </footer>
+  </Page>
+</mvc:View>

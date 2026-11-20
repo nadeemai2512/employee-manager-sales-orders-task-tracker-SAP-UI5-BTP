@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+  <Dialog id="empDialog" title="{form>/title}" contentWidth="30rem">
+    <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+      <Label text="{i18n>firstName}" required="true"/>
+      <Input value="{form>/firstName}" valueLiveUpdate="true"/>
+      <Label text="{i18n>lastName}" required="true"/>
+      <Input value="{form>/lastName}" valueLiveUpdate="true"/>
+      <Label text="{i18n>email}"/>
+      <Input value="{form>/email}" type="Email"/>
+      <Label text="{i18n>jobTitle}"/>
+      <Input value="{form>/jobTitle}"/>
+      <Label text="{i18n>department}"/>
+      <Select selectedKey="{form>/department_ID}" forceSelection="false"
+        items="{ path: '/Departments', sorter: { path: 'name' } }">
+        <core:Item key="{ID}" text="{name}"/>
+      </Select>
+      <Label text="{i18n>salary}"/>
+      <Input value="{form>/salary}" type="Number"/>
+      <Label text="{i18n>joiningDate}"/>
+      <DatePicker value="{form>/joiningDate}" valueFormat="yyyy-MM-dd" displayFormat="medium"/>
+      <Label text="{i18n>active}"/>
+      <Switch state="{form>/active}"/>
+    </f:SimpleForm>
+    <beginButton><Button text="{i18n>save}" type="Emphasized" press=".onSave"/></beginButton>
+    <endButton><Button text="{i18n>cancel}" press=".onCancel"/></endButton>
+  </Dialog>
+</core:FragmentDefinition>

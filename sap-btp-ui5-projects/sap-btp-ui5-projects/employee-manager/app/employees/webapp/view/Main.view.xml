@@ -1,0 +1,63 @@
+<mvc:View
+  controllerName="com.demo.employees.controller.Main"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  displayBlock="true">
+  <Page id="page" title="{i18n>appTitle}">
+    <content>
+      <HBox class="sapUiSmallMargin" wrap="Wrap">
+        <VBox class="sapUiMediumMarginEnd">
+          <Label text="{i18n>statTotal}"/>
+          <ObjectNumber number="{stats>/total}" emphasized="true" class="sapMObjectNumberLarge"/>
+        </VBox>
+        <VBox class="sapUiMediumMarginEnd">
+          <Label text="{i18n>statActive}"/>
+          <ObjectNumber number="{stats>/active}" state="Success" emphasized="true"/>
+        </VBox>
+        <VBox>
+          <Label text="{i18n>statAvg}"/>
+          <ObjectNumber number="{stats>/avgSalary}" unit="INR" emphasized="true"/>
+        </VBox>
+      </HBox>
+      <Table id="empTable" mode="SingleSelectLeft" growing="true" growingThreshold="25"
+        items="{ path: '/Employees', parameters: { $orderby: 'lastName' } }">
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text="{i18n>employees}" level="H2"/>
+            <ToolbarSpacer/>
+            <ComboBox id="deptFilter" width="14rem" placeholder="{i18n>allDepartments}"
+              items="{ path: '/Departments', sorter: { path: 'name' } }" selectionChange=".onDeptFilter">
+              <core:Item xmlns:core="sap.ui.core" key="{ID}" text="{name}"/>
+            </ComboBox>
+            <SearchField width="16rem" placeholder="{i18n>search}" search=".onSearch"/>
+            <Button icon="sap-icon://add" text="{i18n>add}" type="Emphasized" press=".onAdd"/>
+            <Button icon="sap-icon://edit" text="{i18n>edit}" press=".onEdit"/>
+            <Button icon="sap-icon://delete" text="{i18n>delete}" type="Reject" press=".onDelete"/>
+          </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+          <Column><Text text="{i18n>lastName}"/></Column>
+          <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>jobTitle}"/></Column>
+          <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>department}"/></Column>
+          <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>email}"/></Column>
+          <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>joiningDate}"/></Column>
+          <Column hAlign="End"><Text text="{i18n>salary}"/></Column>
+          <Column hAlign="Center"><Text text="{i18n>active}"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem>
+            <cells>
+              <ObjectIdentifier title="{lastName}, {firstName}"/>
+              <Text text="{jobTitle}"/>
+              <Text text="{department/name}"/>
+              <Text text="{email}"/>
+              <Text text="{ path: 'joiningDate', type: 'sap.ui.model.odata.type.Date', formatOptions: { style: 'medium' } }"/>
+              <ObjectNumber number="{ path: 'salary', type: 'sap.ui.model.odata.type.Decimal', constraints: { precision: 10, scale: 2 } }"/>
+              <ObjectStatus text="{= ${active} ? 'Active' : 'Inactive' }" state="{= ${active} ? 'Success' : 'None' }"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+  </Page>
+</mvc:View>
